@@ -1,0 +1,749 @@
+;==========================================================================
+; USB PC Camera VX1000 INF (for Windows XP 64bit / Vista 64bit / Windows 7 64bit)
+; (c) 2008 Microsoft Corporation
+; File version: 1.3.11.0
+; Last modified: 2009-12-02
+;==========================================================================
+
+[Version]
+LayoutFile = Layout.inf, Layout1.inf, Layout2.inf
+signature = "$CHICAGO$"
+Class = Image
+ClassGUID = {6bdd1fc6-810f-11d0-bec7-08002be2092f}
+Provider = %SX%
+CatalogFile.NT = VX1000.cat
+DriverVer = 12/02/2009,5.12.1.72
+
+[Manufacturer]
+%SXTIMfg% = SN, NTamd64.5.1, NTamd64.6.0
+
+[SN]
+
+[SN.NTamd64.5.1]
+%USBPCamMicDesc% = SN.PCamMic.x64,USB\VID_045E&PID_00F7&MI_00
+
+[SN.NTamd64.6.0]
+%USBPCamMicDesc% = SN.PCamMic.WLH.x64,USB\VID_045E&PID_00F7&MI_00
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[SourceDisksNames]
+1 = %SrcDiskId%,,,
+
+[SourceDisksFiles.amd64]
+VX1000.sys = 1,,
+VX1000.ds = 1,,
+VX1000.ini = 1,,
+VX1000.src = 1,,
+vVX1000.dll = 1,,
+vVX1x64.dll = 1,,
+vVX1000.exe = 1,,
+dVX1000.exe = 1,,
+cVX1000.dll = 1,,
+TwainUI.dll = 1,,
+SnxDSC.ini = 1,,
+VX1000.dll = 1,.\%LanguageID%,
+VX1x64.dll = 1,.\%LanguageID%,
+LCCoin32.dll = 1,,
+LcPrx32.ax = 1,,
+LcPrx64.ax = 1,,
+
+[DestinationDirs]
+DefaultDestDir = 11
+SN.Driver.CopyFiles = 10,system32\drivers
+SN.CustomProp64.CopyFiles = 11
+SN.CustomProp32.CopyFiles = 10,SysWow64
+SN.Monitor.CopyFiles = 10
+SN.TWAINConf.CopyFiles = 10
+SN.Misc.CopyFiles = 11
+SN.CoInstallers.CopyFiles = 11
+SN.PCamMic.TWAIN.CopyFiles = 10,twain_32\VX1000
+SN.Prx64.CopyList=11
+SN.Prx32.CopyList=10,SysWOW64
+
+;==========================================================================
+; PCamMic
+;==========================================================================
+[SN.PCamMic.WLH.x64]
+Include =    ks.inf,kscaptur.inf,ksfilter.inf
+Needs =      KS.Registration,KSCAPTUR.Registration.NT,MSPCLOCK.Installation
+AddReg =     SN.Driver.AddReg,SN.CustomProp64.AddReg,SN.Monitor.AddReg,SN.Settings.Addreg,SN.RegSvr32Proxy32.AddReg
+CopyFiles =  SN.Driver.CopyFiles,SN.CustomProp32.CopyFiles,SN.CustomProp64.CopyFiles,SN.Monitor.CopyFiles,SN.TWAINConf.CopyFiles,SN.Misc.CopyFiles,SN.PCamMic.TWAIN.CopyFiles, SN.Prx64.CopyList,SN.Prx32.CopyList
+RegisterDlls=SN.Register.Proxy
+
+SubClass =      StillImage
+DeviceType =    2
+DeviceSubType = 0x1
+Capabilities =  0x01
+Events =        SN.STIEvents
+DeviceData =    SN.PCMicXP.DeviceData
+ICMProfiles =   "sRGB Color Space Profile.icm"
+
+[SN.PCamMic.WLH.x64.Interfaces]
+AddInterface = %KSCATEGORY_CAPTURE%,GLOBAL,SN.PCamMic.AddIntf
+AddInterface = %KSCATEGORY_VIDEO%,GLOBAL,SN.PCamMic.AddIntf
+
+[SN.PCamMic.WLH.x64.Services]
+AddService = VX1000,0x00000002,SN.AddService
+
+[SN.PCamMic.WLH.x64.CoInstallers]
+AddReg =    SN.CoInstallers.AddReg
+CopyFiles = SN.CoInstallers.CopyFiles
+
+[SN.PCamMic.x64]
+Include =    ks.inf,kscaptur.inf,ksfilter.inf
+Needs =      KS.Registration,KSCAPTUR.Registration.NT,MSPCLOCK.Installation
+AddReg =     SN.Driver.AddReg,SN.CustomProp64.AddReg,SN.Monitor.AddReg,SN.Settings.Addreg,SN.RegSvr32Proxy32.AddReg
+CopyFiles =  SN.Driver.CopyFiles,SN.CustomProp32.CopyFiles,SN.CustomProp64.CopyFiles,SN.Monitor.CopyFiles,SN.TWAINConf.CopyFiles,SN.Misc.CopyFiles,SN.PCamMic.TWAIN.CopyFiles, SN.Prx64.CopyList,SN.Prx32.CopyList
+RegisterDlls=SN.Register.Proxy
+
+SubClass =      StillImage
+DeviceType =    3
+DeviceSubType = 0x01
+Capabilities =  0x00000031
+Events =        SN.STIEvents
+DeviceData =    SN.PCMicXP.DeviceData
+ICMProfiles =   "sRGB Color Space Profile.icm"
+
+[SN.Register.Proxy]
+11,,LcProxy.ax,1
+
+[SN.PCamMic.x64.Interfaces]
+AddInterface = %KSCATEGORY_CAPTURE%,GLOBAL,SN.PCamMic.AddIntf
+AddInterface = %KSCATEGORY_VIDEO%,GLOBAL,SN.PCamMic.AddIntf
+
+[SN.PCamMic.x64.Services]
+AddService = VX1000,0x00000002,SN.AddService
+
+[SN.PCamMic.x64.CoInstallers]
+AddReg =    SN.CoInstallers.AddReg
+CopyFiles = SN.CoInstallers.CopyFiles
+
+[SN.PCamMic.AddIntf]
+AddReg=SN.PCamMic.AddIntf.AddReg
+
+[SN.PCamMic.AddIntf.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%USBPCamMicDesc%
+HKR,,ExtensionDLL,,%SN_ExtensionDLL%
+HKR,PageAliases,"{71F96464-78F3-11d0-A18C-00A0C9118956}",1,89,50,b2,5d,f9,9b,4e,48,0x95,0x4a,0xf9,0xad,0x89,0xde,0x5d,0xA2
+HKR,PageAliases,"{71F96465-78F3-11d0-A18C-00A0C9118956}",1,89,50,b2,5d,f9,9b,4e,48,0x95,0x4a,0xf9,0xad,0x89,0xde,0x5d,0xA2
+
+[SN.PCamMic.TWAIN.CopyFiles]
+VX1000.ds
+SnxDSC.ini
+TwainUI.dll
+
+[SN.PCMicXP.DeviceData]
+TwainDS=%USBPCamMicDesc%
+Server=local
+;UI DLL=sti.dll
+;UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+UI Class ID={5d8ef5a3-ac13-11d2-a093-00c04f72dc3c}
+
+;==========================================================================
+; Common Section
+;==========================================================================
+[SN.Driver.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,VX1000.sys
+HKR,,PageOutWhenUnopened,3,00
+HKR,,OkToHibernate,3,01 
+HKR,,HardwareConfig,1,1
+HKR,,CreateFileName,,"USB"
+
+[SN.CustomProp64.AddReg]
+HKCR,CLSID\{F69FAA2C-0DA3-42b7-A993-56A35955C155},,,%PlugIn_CustomCameraProp%
+HKCR,CLSID\{F69FAA2C-0DA3-42b7-A993-56A35955C155}\InprocServer32,,,vVX1000.dll
+HKCR,CLSID\{F69FAA2C-0DA3-42b7-A993-56A35955C155}\InprocServer32,ThreadingModel,,Both
+HKLM,System\CurrentControlSet\Control\MediaInterfaces\{F69FAA2C-0DA3-42b7-A993-56A35955C155},,,%PlugIn_CustomCameraProp%
+HKLM,System\CurrentControlSet\Control\MediaInterfaces\{F69FAA2C-0DA3-42b7-A993-56A35955C155},IID,1,9F,F5,4E,E5, 3E,32, 2e,4a, 0x96, 0xEC, 0x55, 0x99, 0x63, 092, 0x3A, 0x00
+HKCR,Wow6432Node\CLSID\{F69FAA2C-0DA3-42b7-A993-56A35955C155},,,%PlugIn_CustomCameraProp%
+HKCR,Wow6432Node\CLSID\{F69FAA2C-0DA3-42b7-A993-56A35955C155}\InprocServer32,,,vVX1000.dll
+HKCR,Wow6432Node\CLSID\{F69FAA2C-0DA3-42b7-A993-56A35955C155}\InprocServer32,ThreadingModel,,Both
+
+HKCR,CLSID\{5db25089-9bf9-484e-954a-f9ad89de5dA2},,,%PropPage_CustomCameraProp%
+HKCR,CLSID\{5db25089-9bf9-484e-954a-f9ad89de5dA2}\InprocServer32,,,vVX1000.dll
+HKCR,CLSID\{5db25089-9bf9-484e-954a-f9ad89de5dA2}\InprocServer32,ThreadingModel,,Both
+HKLM,System\CurrentControlSet\Control\MediaSets\{F69FAA2C-0DA3-42b7-A993-56A35955C155}\PropertyPages\{5db25089-9bf9-484e-954a-f9ad89de5dA2},,,%PropPage_CustomCameraProp%
+HKCR,Wow6432Node\CLSID\{5db25089-9bf9-484e-954a-f9ad89de5dA2},,,%PropPage_CustomCameraProp%
+HKCR,Wow6432Node\CLSID\{5db25089-9bf9-484e-954a-f9ad89de5dA2}\InprocServer32,,,vVX1000.dll
+HKCR,Wow6432Node\CLSID\{5db25089-9bf9-484e-954a-f9ad89de5dA2}\InprocServer32,ThreadingModel,,Both
+
+[SN.Monitor.AddReg]
+HKLM,%RunPath%,"VX1000",,"%10%\vVX1000.exe"
+
+[SN.CoInstallers.AddReg]
+HKR,,CoInstallers32,0x00010000,"LCCoin32.dll"
+HKCU,"Software\Microsoft\LifeCam","CoinstallerPath",,"LifeCam\Setup\Files\Driver64\VX1000\"
+
+HKLM,SOFTWARE\Microsoft\LifeCam\%ProductName%\PIDS,VP00,0x00010001,73269495
+HKR,DefaultSettings\OV7660,DUMPEEPROM,0x00010001,0
+HKR,DefaultSettings\OV7660,Effect,0x00010001,0
+HKR,DefaultSettings\OV7660,Exposure,0x00010001,50
+HKR,DefaultSettings\OV7660,ExposureAuto,0x00010001,1
+HKR,DefaultSettings\OV7660,USBBandWidth,0x00010001,8
+HKR,DefaultSettings\OV7660,USBBandWidthAuto,0x00010001,1
+HKR,DefaultSettings\OV7660,ImageFormatControl,0x00010001,15875
+HKR,DefaultSettings\OV7660,SnapShotImageSize,0x00010001,0
+HKR,DefaultSettings\OV7660,VGASubSample,0x00010001,1
+HKR,DefaultSettings\OV7660,LCD,0x00010001,0
+HKR,DefaultSettings\OV7660,OutDoor,0x00010001,0
+HKR,DefaultSettings\OV7660,LowLight,0x00010001,0
+HKR,DefaultSettings\OV7660,PowerSavingMode,0x00010001,0
+HKR,DefaultSettings\OV7660,PowerSavingFor105,0x00010001,0
+HKR,DefaultSettings\OV7660,PSMode2Interval1,0x00010001,200
+HKR,DefaultSettings\OV7660,PSMode2Interval2,0x00010001,1
+HKR,DefaultSettings\OV7660,VP00,0x00010001,73269495
+HKR,DefaultSettings\OV7660,VP01,0x00010001,0
+HKR,DefaultSettings\OV7660,VP02,0x00010001,0
+HKR,DefaultSettings\OV7660,VP03,0x00010001,0
+HKR,DefaultSettings\OV7660,VP04,0x00010001,0
+HKR,DefaultSettings\OV7660,APInterfaceEnable,0x00010001,0
+HKR,DefaultSettings\OV7660,PCam0000,0x00010001,0
+HKR,DefaultSettings\OV7660,PCam0001,0x00010001,720904
+HKR,DefaultSettings\OV7660,PCam0002,0x00010001,0
+HKR,DefaultSettings\OV7660,PCam0003,0x00010001,720904
+HKR,DefaultSettings\OV7660,PCam0004,0x00010001,0
+HKR,DefaultSettings\OV7660,PCam0005,0x00010001,4
+HKR,DefaultSettings\OV7660,PCam0006,0x00010001,4
+HKR,DefaultSettings\OV7660,PCam0007,0x00010001,0
+HKR,DefaultSettings\OV7660,PCam0008,0x00010001,1
+HKR,DefaultSettings\OV7660,PCam0009,0x00010001,1
+HKR,DefaultSettings\OV7660,ASC0000,0x00010001,6
+HKR,DefaultSettings\OV7660,ASC0001,0x00010001,300000
+HKR,DefaultSettings\OV7660,ASC0002,0x00010001,9000
+HKR,DefaultSettings\OV7660,ASC0003,0x00010001,0
+HKR,DefaultSettings\OV7660,ASC0004,0x00010001,3
+HKR,DefaultSettings\OV7660,ASC0005,0x00010001,333333
+HKR,DefaultSettings\OV7660,ASC0006,0x00010001,83333
+HKR,DefaultSettings\OV7660,ASC0007,0x00010001,40
+HKR,DefaultSettings\OV7660,ASC0008,0x00010001,5
+HKR,DefaultSettings\OV7660,ASC0009,0x00010001,1
+HKR,DefaultSettings\OV7660,Sensor0000,0x00010001,4500
+HKR,DefaultSettings\OV7660,Sensor0001,0x00010001,15000
+HKR,DefaultSettings\OV7660,Sensor0002,0x00010001,10000
+HKR,DefaultSettings\OV7660,Sensor0003,0x00010001,4500
+HKR,DefaultSettings\OV7660,Sensor0004,0x00010001,15000
+HKR,DefaultSettings\OV7660,Sensor0005,0x00010001,10000
+HKR,DefaultSettings\OV7660,Sensor0006,0x00010001,4500
+HKR,DefaultSettings\OV7660,Sensor0007,0x00010001,15000
+HKR,DefaultSettings\OV7660,Sensor0008,0x00010001,10000
+HKR,DefaultSettings\OV7660,Sensor0009,0x00010001,10000
+HKR,DefaultSettings\OV7660,Sensor0010,0x00010001,40000
+HKR,DefaultSettings\OV7660,Sensor0011,0x00010001,128
+HKR,DefaultSettings\OV7660,Sensor0012,0x00010001,0
+HKR,DefaultSettings\OV7660,Sensor0013,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0000,0x00010001,8
+HKR,DefaultSettings\OV7660,ASIC0001,0x00010001,1
+HKR,DefaultSettings\OV7660,ASIC0002,0x00010001,1
+HKR,DefaultSettings\OV7660,ASIC0003,0x00010001,10
+HKR,DefaultSettings\OV7660,ASIC0004,0x00010001,10000
+HKR,DefaultSettings\OV7660,ASIC0005,0x00010001,10000
+HKR,DefaultSettings\OV7660,ASIC0006,0x00010001,10000
+HKR,DefaultSettings\OV7660,ASIC0007,0x00010001,6
+HKR,DefaultSettings\OV7660,ASIC0008,0x00010001,6000
+HKR,DefaultSettings\OV7660,ASIC0009,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0010,0x00010001,13000
+HKR,DefaultSettings\OV7660,ASIC0011,0x00010001,1730000
+HKR,DefaultSettings\OV7660,ASIC0012,0x00010001,18000
+HKR,DefaultSettings\OV7660,ASIC0013,0x00010001,10000
+HKR,DefaultSettings\OV7660,ASIC0014,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0015,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0016,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0017,0x00010001,10000
+HKR,DefaultSettings\OV7660,ASIC0018,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0019,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0020,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0021,0x00010001,10000
+HKR,DefaultSettings\OV7660,ASIC0022,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0023,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0024,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0025,0x00010001,10000
+HKR,DefaultSettings\OV7660,ASIC0026,0x00010001,10000
+HKR,DefaultSettings\OV7660,ASIC0027,0x00010001,10000
+HKR,DefaultSettings\OV7660,ASIC0028,0x00010001,16000
+HKR,DefaultSettings\OV7660,ASIC0029,0x00010001,13000
+HKR,DefaultSettings\OV7660,ASIC0030,0x00010001,2
+HKR,DefaultSettings\OV7660,ASIC0031,0x00010001,40000
+HKR,DefaultSettings\OV7660,ASIC0032,0x00010001,2
+HKR,DefaultSettings\OV7660,ASIC0033,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0034,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0035,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0036,0x00010001,255
+HKR,DefaultSettings\OV7660,ASIC0037,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0038,0x00010001,20
+HKR,DefaultSettings\OV7660,ASIC0039,0x00010001,50
+HKR,DefaultSettings\OV7660,ASIC0040,0x00010001,0
+HKR,DefaultSettings\OV7660,ASIC0041,0x00010001,50
+HKR,DefaultSettings\OV7660,ASIC0042,0x00010001,5000
+HKR,DefaultSettings\OV7660,AE0000,0x00010001,1
+HKR,DefaultSettings\OV7660,AE0001,0x00010001,1
+HKR,DefaultSettings\OV7660,AE0002,0x00010001,120
+HKR,DefaultSettings\OV7660,AE0003,0x00010001,1
+HKR,DefaultSettings\OV7660,AE0004,0x00010001,800000
+HKR,DefaultSettings\OV7660,AE0005,0x00010001,11000
+HKR,DefaultSettings\OV7660,AE0006,0x00010001,8500
+HKR,DefaultSettings\OV7660,AE0007,0x00010001,2500
+HKR,DefaultSettings\OV7660,AE0008,0x00010001,12000
+HKR,DefaultSettings\OV7660,AE0009,0x00010001,9000
+HKR,DefaultSettings\OV7660,AE0010,0x00010001,10000000
+HKR,DefaultSettings\OV7660,AE0011,0x00010001,60000
+HKR,DefaultSettings\OV7660,AE0012,0x00010001,0
+HKR,DefaultSettings\OV7660,AE0013,0x00010001,0
+HKR,DefaultSettings\OV7660,AE0014,0x00010001,15000
+HKR,DefaultSettings\OV7660,AE0015,0x00010001,0
+HKR,DefaultSettings\OV7660,AE0016,0x00010001,0
+HKR,DefaultSettings\OV7660,AE0017,0x00010001,6
+HKR,DefaultSettings\OV7660,AE0018,0x00010001,24000
+HKR,DefaultSettings\OV7660,AE0019,0x00010001,1000
+HKR,DefaultSettings\OV7660,AE0020,0x00010001,1
+HKR,DefaultSettings\OV7660,AE0021,0x00010001,25000
+HKR,DefaultSettings\OV7660,AE0022,0x00010001,20000
+HKR,DefaultSettings\OV7660,AE0023,0x00010001,15000
+HKR,DefaultSettings\OV7660,AE0024,0x00010001,12000
+HKR,DefaultSettings\OV7660,AE0025,0x00010001,0
+HKR,DefaultSettings\OV7660,AE0026,0x00010001,80000
+HKR,DefaultSettings\OV7660,AE0027,0x00010001,10000
+HKR,DefaultSettings\OV7660,AE0028,0x00010001,10000
+HKR,DefaultSettings\OV7660,AE0029,0x00010001,10000
+HKR,DefaultSettings\OV7660,AE0030,0x00010001,950000
+HKR,DefaultSettings\OV7660,AWB0000,0x00010001,1
+HKR,DefaultSettings\OV7660,AWB0001,0x00010001,4000
+HKR,DefaultSettings\OV7660,AWB0002,0x00010001,10300
+HKR,DefaultSettings\OV7660,AWB0003,0x00010001,10000
+HKR,DefaultSettings\OV7660,AWB0004,0x00010001,9800
+HKR,DefaultSettings\OV7660,AWB0005,0x00010001,10500
+HKR,DefaultSettings\OV7660,AWB0006,0x00010001,9500
+HKR,DefaultSettings\OV7660,AWB0007,0x00010001,10500
+HKR,DefaultSettings\OV7660,AWB0008,0x00010001,9500
+HKR,DefaultSettings\OV7660,AWB0009,0x00010001,450000
+HKR,DefaultSettings\OV7660,AWB0010,0x00010001,232
+HKR,DefaultSettings\OV7660,AWB0011,0x00010001,20
+HKR,DefaultSettings\OV7660,AWB0012,0x00010001,16
+HKR,DefaultSettings\OV7660,AWB0013,0x00010001,252
+HKR,DefaultSettings\OV7660,AWB0014,0x00010001,168
+HKR,DefaultSettings\OV7660,AWB0015,0x00010001,88
+HKR,DefaultSettings\OV7660,AWB0016,0x00010001,148
+HKR,DefaultSettings\OV7660,AWB0017,0x00010001,108
+HKR,DefaultSettings\OV7660,AWB0018,0x00010001,178
+HKR,DefaultSettings\OV7660,AWB0019,0x00010001,93
+HKR,DefaultSettings\OV7660,AWB0020,0x00010001,178
+HKR,DefaultSettings\OV7660,AWB0021,0x00010001,93
+HKR,DefaultSettings\OV7660,AWB0022,0x00010001,10400
+HKR,DefaultSettings\OV7660,AWB0023,0x00010001,9600
+HKR,DefaultSettings\OV7660,AWB0024,0x00010001,10400
+HKR,DefaultSettings\OV7660,AWB0025,0x00010001,9600
+HKR,DefaultSettings\OV7660,Shell0000,0x00010001,0
+HKR,DefaultSettings\OV7660,Shell0001,0x00010001,0
+HKR,DefaultSettings\OV7660,Shell0002,0x00010001,0
+HKR,DefaultSettings\OV7660,Shell0003,0x00010001,1
+HKR,DefaultSettings\OV7660,Scale0000,0x00010001,0
+HKR,DefaultSettings\OV7660,FaceTrack0000,0x00010001,0
+HKR,DefaultSettings\OV7660,FaceTrack0001,0x00010001,8
+HKR,DefaultSettings\OV7660,FaceTrack0002,0x00010001,213
+HKR,DefaultSettings\OV7660,FaceTrack0003,0x00010001,160
+HKR,DefaultSettings\OV7660,FaceTrack0004,0x00010001,20
+HKR,DefaultSettings\OV7660,FaceTrack0005,0x00010001,40
+HKR,DefaultSettings\OV7660,FaceTrack0006,0x00010001,238
+HKR,DefaultSettings\OV7660,FaceTrack0007,0x00010001,8000
+HKR,DefaultSettings\OV7660,FaceTrack0008,0x00010001,5
+HKR,DefaultSettings\OV7660,FaceTrack0009,0x00010001,2
+HKR,DefaultSettings\OV7660,FaceTrack0010,0x00010001,2
+HKR,DefaultSettings\OV7660,FaceTrack0011,0x00010001,1
+HKR,DefaultSettings\OV7660,FaceTrack0012,0x00010001,-4
+HKR,DefaultSettings\OV7660,FaceTrack0013,0x00010001,66
+HKR,DefaultSettings\OV7660,FaceTrack0014,0x00010001,8
+HKR,DefaultSettings\OV7660,FaceTrack0015,0x00010001,20
+HKR,DefaultSettings\OV7660,FaceTrack0016,0x00010001,90
+HKR,DefaultSettings\OV7660,FaceTrack0017,0x00010001,200
+HKR,DefaultSettings\OV7660,FaceTrack0018,0x00010001,770
+HKR,DefaultSettings\OV7660,FaceTrack0019,0x00010001,60
+HKR,DefaultSettings\OV7660,FaceTrack0020,0x00010001,40
+HKR,DefaultSettings\OV7660,FaceTrack0021,0x00010001,16
+HKR,DefaultSettings\OV7660,FaceTrack0022,0x00010001,2500
+HKR,DefaultSettings\OV7660,FaceTrack0023,0x00010001,0
+HKR,DefaultSettings\OV7660,FaceTrack0024,0x00010001,0
+HKR,DefaultSettings\OV7660,FaceTrack0025,0x00010001,0
+
+[SN.Settings.Addreg]
+HKR,Settings,ButtonFunc,0x00010001,12
+HKR,Settings,QuickStartPath,0x00010000,"%16426%\Microsoft LifeCam\icepick.exe"
+
+[SN.Settings.Addreg.Security]
+"D:AR(A;;GA;;;BU)"
+
+[SN.Driver.CopyFiles]
+VX1000.sys
+
+[SN.CustomProp64.CopyFiles]
+vVX1000.dll,vVX1x64.dll
+VX1000.dll,VX1x64.dll
+
+[SN.CustomProp32.CopyFiles]
+vVX1000.dll
+VX1000.dll
+
+[SN.Monitor.CopyFiles]
+vVX1000.exe
+
+[SN.TWAINConf.CopyFiles]
+VX1000.ini
+VX1000.src
+
+[SN.Misc.CopyFiles]
+cVX1000.dll
+
+[SN.CoInstallers.CopyFiles]
+cVX1000.dll
+LCCoin32.dll
+
+[SN.Prx64.CopyList]
+LcProxy.ax,LcPrx64.ax
+
+[SN.Prx32.CopyList]
+LcProxy.ax,LcPrx32.ax
+
+[SN.RegSvr32Proxy32.AddReg]
+HKCR,CLSID\{596C3DA2-E711-4252-9E65-128A43FDD43B},,0x00004000,"LifeCamInterfaceHandler"
+HKCR,CLSID\{596C3DA2-E711-4252-9E65-128A43FDD43B}\InprocServer32,,0x00004000,"%10%\SysWOW64\LcProxy.ax"
+HKCR,CLSID\{596C3DA2-E711-4252-9E65-128A43FDD43B}\InprocServer32,"ThreadingModel",0x00004000,"Both"
+
+HKCR,CLSID\{6045F5F4-9275-453b-87CB-7CFB3E367285},,0x00004000,"LifeCam Proxy Filter"
+HKCR,CLSID\{6045F5F4-9275-453b-87CB-7CFB3E367285}\InprocServer32,,0x00004000,"%10%\SysWOW64\LcProxy.ax"
+HKCR,CLSID\{6045F5F4-9275-453b-87CB-7CFB3E367285}\InprocServer32,"ThreadingModel",0x00004000,"Both"
+
+[SN.AddService]
+DisplayName   = %SERVICE_DISPLAY_NAME%
+ServiceType   = %SERVICE_KERNEL_DRIVER%
+StartType     = %SERVICE_DEMAND_START%
+ErrorControl  = %SERVICE_ERROR_NORMAL%
+ServiceBinary = %12%\VX1000.sys
+
+[SN.STIEvents]
+SnapShotChanged = %SN_SnapShotChanged%,{C76F452C-534A-4f68-A61C-44B35C94B30C},*
+
+;==========================================================================
+; String Table (German - 1031)
+;==========================================================================
+[Strings.0407]
+SrcDiskId = "USB PC Camera Installation Disk"
+KSCATEGORY_CAPTURE = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_VIDEO = "{6994AD05-93EF-11D0-A3CC-00A0C9223196}"
+ProxyVCap.CLSID = "{6045F5F4-9275-453b-87CB-7CFB3E367285}"
+SERVICE_DISPLAY_NAME = "VX-1000"
+SERVICE_KERNEL_DRIVER = 1
+SERVICE_DEMAND_START = 3
+SERVICE_ERROR_NORMAL = 1
+PlugIn_CustomCameraProp = "WDM Custom ICustomCamera Interface handler"
+PropPage_CustomCameraProp = "Custom Camera Property Page"
+RunOncePath = "SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+RunPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+
+SN_ExtensionDLL = "vVX1000.dll"
+SN_SnapShotChanged = "SnapShot Changed Event"
+
+; Localizable =============================================================
+SX = "Microsoft"
+SXTIMfg = "Microsoft"
+USBPCamMicDesc = "Microsoft LifeCam VX-1000"
+ProductName = "VX1000"
+LanguageID = "1031"
+
+;==========================================================================
+; String Table (French - 1036)
+;==========================================================================
+[Strings.040C]
+SrcDiskId = "USB PC Camera Installation Disk"
+KSCATEGORY_CAPTURE = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_VIDEO = "{6994AD05-93EF-11D0-A3CC-00A0C9223196}"
+ProxyVCap.CLSID = "{6045F5F4-9275-453b-87CB-7CFB3E367285}"
+SERVICE_DISPLAY_NAME = "VX-1000"
+SERVICE_KERNEL_DRIVER = 1
+SERVICE_DEMAND_START = 3
+SERVICE_ERROR_NORMAL = 1
+PlugIn_CustomCameraProp = "WDM Custom ICustomCamera Interface handler"
+PropPage_CustomCameraProp = "Custom Camera Property Page"
+RunOncePath = "SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+RunPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+
+SN_ExtensionDLL = "vVX1000.dll"
+SN_SnapShotChanged = "SnapShot Changed Event"
+
+; Localizable =============================================================
+SX = "Microsoft"
+SXTIMfg = "Microsoft"
+USBPCamMicDesc = "Microsoft LifeCam VX-1000"
+ProductName = "VX1000"
+LanguageID = "1036"
+
+;==========================================================================
+; String Table (Japanese - 1041)
+;==========================================================================
+[Strings.0411]
+SrcDiskId = "USB PC Camera Installation Disk"
+KSCATEGORY_CAPTURE = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_VIDEO = "{6994AD05-93EF-11D0-A3CC-00A0C9223196}"
+ProxyVCap.CLSID = "{6045F5F4-9275-453b-87CB-7CFB3E367285}"
+SERVICE_DISPLAY_NAME = "VX-1000"
+SERVICE_KERNEL_DRIVER = 1
+SERVICE_DEMAND_START = 3
+SERVICE_ERROR_NORMAL = 1
+PlugIn_CustomCameraProp = "WDM Custom ICustomCamera Interface handler"
+PropPage_CustomCameraProp = "Custom Camera Property Page"
+RunOncePath = "SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+RunPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+
+SN_ExtensionDLL = "vVX1000.dll"
+SN_SnapShotChanged = "SnapShot Changed Event"
+
+; Localizable =============================================================
+SX = "Microsoft"
+SXTIMfg = "Microsoft"
+USBPCamMicDesc = "Microsoft LifeCam VX-1000"
+ProductName = "VX1000"
+LanguageID = "1041"
+
+;==========================================================================
+; String Table (Chinese Traditional - 1028)
+;==========================================================================
+[Strings.0404]
+SrcDiskId = "USB PC Camera Installation Disk"
+KSCATEGORY_CAPTURE = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_VIDEO = "{6994AD05-93EF-11D0-A3CC-00A0C9223196}"
+ProxyVCap.CLSID = "{6045F5F4-9275-453b-87CB-7CFB3E367285}"
+SERVICE_DISPLAY_NAME = "VX-1000"
+SERVICE_KERNEL_DRIVER = 1
+SERVICE_DEMAND_START = 3
+SERVICE_ERROR_NORMAL = 1
+PlugIn_CustomCameraProp = "WDM Custom ICustomCamera Interface handler"
+PropPage_CustomCameraProp = "Custom Camera Property Page"
+RunOncePath = "SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+RunPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+
+SN_ExtensionDLL = "vVX1000.dll"
+SN_SnapShotChanged = "SnapShot Changed Event"
+
+; Localizable =============================================================
+SX = "Microsoft"
+SXTIMfg = "Microsoft"
+USBPCamMicDesc = "Microsoft LifeCam VX-1000"
+ProductName = "VX1000"
+LanguageID = "1028"
+
+;==========================================================================
+; String Table (Spanish - 1034)
+;==========================================================================
+[Strings.040A]
+SrcDiskId = "USB PC Camera Installation Disk"
+KSCATEGORY_CAPTURE = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_VIDEO = "{6994AD05-93EF-11D0-A3CC-00A0C9223196}"
+ProxyVCap.CLSID = "{6045F5F4-9275-453b-87CB-7CFB3E367285}"
+SERVICE_DISPLAY_NAME = "VX-1000"
+SERVICE_KERNEL_DRIVER = 1
+SERVICE_DEMAND_START = 3
+SERVICE_ERROR_NORMAL = 1
+PlugIn_CustomCameraProp = "WDM Custom ICustomCamera Interface handler"
+PropPage_CustomCameraProp = "Custom Camera Property Page"
+RunOncePath = "SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+RunPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+
+SN_ExtensionDLL = "vVX1000.dll"
+SN_SnapShotChanged = "SnapShot Changed Event"
+
+; Localizable =============================================================
+SX = "Microsoft"
+SXTIMfg = "Microsoft"
+USBPCamMicDesc = "Microsoft LifeCam VX-1000"
+ProductName = "VX1000"
+LanguageID = "1034"
+
+;==========================================================================
+; String Table (Italian - 1040)
+;==========================================================================
+[Strings.0410]
+SrcDiskId = "USB PC Camera Installation Disk"
+KSCATEGORY_CAPTURE = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_VIDEO = "{6994AD05-93EF-11D0-A3CC-00A0C9223196}"
+ProxyVCap.CLSID = "{6045F5F4-9275-453b-87CB-7CFB3E367285}"
+SERVICE_DISPLAY_NAME = "VX-1000"
+SERVICE_KERNEL_DRIVER = 1
+SERVICE_DEMAND_START = 3
+SERVICE_ERROR_NORMAL = 1
+PlugIn_CustomCameraProp = "WDM Custom ICustomCamera Interface handler"
+PropPage_CustomCameraProp = "Custom Camera Property Page"
+RunOncePath = "SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+RunPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+
+SN_ExtensionDLL = "vVX1000.dll"
+SN_SnapShotChanged = "SnapShot Changed Event"
+
+; Localizable =============================================================
+SX = "Microsoft"
+SXTIMfg = "Microsoft"
+USBPCamMicDesc = "Microsoft LifeCam VX-1000"
+ProductName = "VX1000"
+LanguageID = "1040"
+
+;==========================================================================
+; String Table (Korean - 1042)
+;==========================================================================
+[Strings.0412]
+SrcDiskId = "USB PC Camera Installation Disk"
+KSCATEGORY_CAPTURE = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_VIDEO = "{6994AD05-93EF-11D0-A3CC-00A0C9223196}"
+ProxyVCap.CLSID = "{6045F5F4-9275-453b-87CB-7CFB3E367285}"
+SERVICE_DISPLAY_NAME = "VX-1000"
+SERVICE_KERNEL_DRIVER = 1
+SERVICE_DEMAND_START = 3
+SERVICE_ERROR_NORMAL = 1
+PlugIn_CustomCameraProp = "WDM Custom ICustomCamera Interface handler"
+PropPage_CustomCameraProp = "Custom Camera Property Page"
+RunOncePath = "SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+RunPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+
+SN_ExtensionDLL = "vVX1000.dll"
+SN_SnapShotChanged = "SnapShot Changed Event"
+
+; Localizable =============================================================
+SX = "Microsoft"
+SXTIMfg = "Microsoft"
+USBPCamMicDesc = "Microsoft LifeCam VX-1000"
+ProductName = "VX1000"
+LanguageID = "1042"
+
+;==========================================================================
+; String Table (Portuguese Brazilian - 1046)
+;==========================================================================
+[Strings.0416]
+SrcDiskId = "USB PC Camera Installation Disk"
+KSCATEGORY_CAPTURE = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_VIDEO = "{6994AD05-93EF-11D0-A3CC-00A0C9223196}"
+ProxyVCap.CLSID = "{6045F5F4-9275-453b-87CB-7CFB3E367285}"
+SERVICE_DISPLAY_NAME = "VX-1000"
+SERVICE_KERNEL_DRIVER = 1
+SERVICE_DEMAND_START = 3
+SERVICE_ERROR_NORMAL = 1
+PlugIn_CustomCameraProp = "WDM Custom ICustomCamera Interface handler"
+PropPage_CustomCameraProp = "Custom Camera Property Page"
+RunOncePath = "SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+RunPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+
+SN_ExtensionDLL = "vVX1000.dll"
+SN_SnapShotChanged = "SnapShot Changed Event"
+
+; Localizable =============================================================
+SX = "Microsoft"
+SXTIMfg = "Microsoft"
+USBPCamMicDesc = "Microsoft LifeCam VX-1000"
+ProductName = "VX1000"
+LanguageID = "1046"
+
+;==========================================================================
+; String Table (Russian - 1049)
+;==========================================================================
+[Strings.0419]
+SrcDiskId = "USB PC Camera Installation Disk"
+KSCATEGORY_CAPTURE = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_VIDEO = "{6994AD05-93EF-11D0-A3CC-00A0C9223196}"
+ProxyVCap.CLSID = "{6045F5F4-9275-453b-87CB-7CFB3E367285}"
+SERVICE_DISPLAY_NAME = "VX-1000"
+SERVICE_KERNEL_DRIVER = 1
+SERVICE_DEMAND_START = 3
+SERVICE_ERROR_NORMAL = 1
+PlugIn_CustomCameraProp = "WDM Custom ICustomCamera Interface handler"
+PropPage_CustomCameraProp = "Custom Camera Property Page"
+RunOncePath = "SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+RunPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+
+SN_ExtensionDLL = "vVX1000.dll"
+SN_SnapShotChanged = "SnapShot Changed Event"
+
+; Localizable =============================================================
+SX = "Microsoft"
+SXTIMfg = "Microsoft"
+USBPCamMicDesc = "Microsoft LifeCam VX-1000"
+ProductName = "VX1000"
+LanguageID = "1049"
+
+;==========================================================================
+; String Table (Chinese Simplified - 2052)
+;==========================================================================
+[Strings.0804]
+SrcDiskId = "USB PC Camera Installation Disk"
+KSCATEGORY_CAPTURE = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_VIDEO = "{6994AD05-93EF-11D0-A3CC-00A0C9223196}"
+ProxyVCap.CLSID = "{6045F5F4-9275-453b-87CB-7CFB3E367285}"
+SERVICE_DISPLAY_NAME = "VX-1000"
+SERVICE_KERNEL_DRIVER = 1
+SERVICE_DEMAND_START = 3
+SERVICE_ERROR_NORMAL = 1
+PlugIn_CustomCameraProp = "WDM Custom ICustomCamera Interface handler"
+PropPage_CustomCameraProp = "Custom Camera Property Page"
+RunOncePath = "SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+RunPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+
+SN_ExtensionDLL = "vVX1000.dll"
+SN_SnapShotChanged = "SnapShot Changed Event"
+
+; Localizable =============================================================
+SX = "Microsoft"
+SXTIMfg = "Microsoft"
+USBPCamMicDesc = "Microsoft LifeCam VX-1000"
+ProductName = "VX1000"
+LanguageID = "2052"
+
+;==========================================================================
+; String Table (Portuguese Iberian - 2070)
+;==========================================================================
+[Strings.0816]
+SrcDiskId = "USB PC Camera Installation Disk"
+KSCATEGORY_CAPTURE = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_VIDEO = "{6994AD05-93EF-11D0-A3CC-00A0C9223196}"
+ProxyVCap.CLSID = "{6045F5F4-9275-453b-87CB-7CFB3E367285}"
+SERVICE_DISPLAY_NAME = "VX-1000"
+SERVICE_KERNEL_DRIVER = 1
+SERVICE_DEMAND_START = 3
+SERVICE_ERROR_NORMAL = 1
+PlugIn_CustomCameraProp = "WDM Custom ICustomCamera Interface handler"
+PropPage_CustomCameraProp = "Custom Camera Property Page"
+RunOncePath = "SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+RunPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+
+SN_ExtensionDLL = "vVX1000.dll"
+SN_SnapShotChanged = "SnapShot Changed Event"
+
+; Localizable =============================================================
+SX = "Microsoft"
+SXTIMfg = "Microsoft"
+USBPCamMicDesc = "Microsoft LifeCam VX-1000"
+ProductName = "VX1000"
+LanguageID = "2070"
+
+;==========================================================================
+; String Table (English - 1033)
+;==========================================================================
+[Strings]
+SrcDiskId = "USB PC Camera Installation Disk"
+KSCATEGORY_CAPTURE = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_VIDEO = "{6994AD05-93EF-11D0-A3CC-00A0C9223196}"
+ProxyVCap.CLSID = "{6045F5F4-9275-453b-87CB-7CFB3E367285}"
+SERVICE_DISPLAY_NAME = "VX-1000"
+SERVICE_KERNEL_DRIVER = 1
+SERVICE_DEMAND_START = 3
+SERVICE_ERROR_NORMAL = 1
+PlugIn_CustomCameraProp = "WDM Custom ICustomCamera Interface handler"
+PropPage_CustomCameraProp = "Custom Camera Property Page"
+RunOncePath = "SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+RunPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+
+SN_ExtensionDLL = "vVX1000.dll"
+SN_SnapShotChanged = "SnapShot Changed Event"
+
+; Localizable =============================================================
+SX = "Microsoft"
+SXTIMfg = "Microsoft"
+USBPCamMicDesc = "Microsoft LifeCam VX-1000"
+ProductName = "VX1000"
+LanguageID = "1033"
