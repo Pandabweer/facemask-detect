@@ -18,7 +18,7 @@ def detect_and_predict_mask(frame, faceNet, maskNet):
 	# pass the blob through the network and obtain the face detections
 	faceNet.setInput(blob)
 	detections = faceNet.forward()
-	print(detections.shape)
+	#print(detections.shape)
 
 	# initialize our list of faces, their corresponding locations,
 	# and the list of predictions from our face mask network
@@ -79,15 +79,16 @@ faceNet = cv2.dnn.readNet(prototxtPath, weightsPath)
 maskNet = load_model("./face_detector/mask_detector.model")
 
 # initialize the video stream
-print("[INFO] starting video stream...")
+print("[INFO] Starting video stream...")
 vs = VideoStream(src=0).start()
 
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it
-	# to have a maximum width of 400 pixels
+	# to have a maximum width of 1920 pixels
 	frame = vs.read()
-	frame = imutils.resize(frame, width=1200)
+	frame = imutils.resize(frame, width=1920)
+	#frame = cv2.resize(frame, (1920, 1080), interpolation = cv2.INTER_AREA)
 
 	# detect faces in the frame and determine if they are wearing a
 	# face mask or not
@@ -120,6 +121,7 @@ while True:
 
 	# if the `q` key was pressed, break from the loop
 	if key == ord("q"):
+		print("[INFO] Ending program")
 		break
 
 # do a bit of cleanup
