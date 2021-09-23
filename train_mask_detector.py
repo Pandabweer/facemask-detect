@@ -1,4 +1,7 @@
-# import the necessary packages
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.layers import AveragePooling2D
@@ -16,9 +19,6 @@ from sklearn.preprocessing import LabelBinarizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from imutils import paths
-import matplotlib.pyplot as plt
-import numpy as np
-import os
 
 # initialize the initial learning rate, number of epochs to train for,
 # and batch size

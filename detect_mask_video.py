@@ -82,7 +82,7 @@ class Main(object):
 		# return a 2-tuple of the face locations and their corresponding locations
 		return (locs, preds)
 
-	async def detect_mask(self):
+	async def detect_mask(self) -> None:
 		print('[INFO] Programma is gestart!')
 		# loop over the frames from the video stream
 		while True:
