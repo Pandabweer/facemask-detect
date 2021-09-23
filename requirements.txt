@@ -1,5 +1,7 @@
 tensorflow
+tensorflow-gpu
 keras
+asyncio
 imutils
 numpy
 opencv-python
