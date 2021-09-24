@@ -102,7 +102,7 @@ class Main(object):
 
 				# determine the class label and color we'll use to draw the bounding box and text
 				label = 'Masker' if mask > withoutMask else 'Geen masker'
-				color = (0, 255, 0) if label == 'Mask' else (0, 0, 255)
+				color = (0, 255, 0) if label == 'Masker' else (0, 0, 255)
 
 				# include the probability in the label
 				label = '{}: {:.2f}%'.format(label, max(mask, withoutMask) * 100)
@@ -113,6 +113,9 @@ class Main(object):
 
 			# show the output frame
 			cv2.imshow('Frame', frame)
+
+			# tick (fps) -> 60/(0.04*60) = 25 fps
+			time.sleep(0.03)
 
 			# if the `q` key was pressed, break from the loop
 			if cv2.waitKey(1) & 0xFF == ord('q'):
