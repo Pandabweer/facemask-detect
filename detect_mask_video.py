@@ -99,7 +99,7 @@ class Train_mask_detector(object):
 
 		return model
 
-	def compile_model(self):
+	def compile_model(self) -> None:
 		print("[INFO] compiling model...")
 		opt = Adam(learning_rate=INIT_LR, decay=INIT_LR / EPOCHS)
 		self.model.compile(loss="binary_crossentropy", optimizer=opt, metrics=["accuracy"])
@@ -114,7 +114,7 @@ class Train_mask_detector(object):
 			epochs=EPOCHS
 		)
 
-	def finalize():
+	def finalize(self) -> None:
 		# make predictions on the testing set
 		print("[INFO] evaluating network...")
 		predIdxs = model.predict(testX, batch_size=BS)
