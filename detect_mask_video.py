@@ -87,7 +87,7 @@ class Train_mask_detector(object):
 			fill_mode="nearest"
 		)
 
-	def cons_model(self) -> model:
+	def cons_model(self) -> Model:
 		baseModel = MobileNetV2(
 			weights="imagenet",
 			include_top=False,
