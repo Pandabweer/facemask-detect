@@ -239,7 +239,7 @@ class Main(object):
 			cv2.imshow('Frame', frame)
 
 			# tick (fps) -> 60/(0.04*60) = 25 fps
-			time.sleep(0.03)
+			#time.sleep(0.03)
 
 			# if the `q` key was pressed, break from the loop
 			if cv2.waitKey(1) & 0xFF == ord('q'):
