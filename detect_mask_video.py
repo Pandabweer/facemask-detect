@@ -12,14 +12,17 @@ from tensorflow.keras.preprocessing.image import img_to_array, load_img, ImageDa
 from tensorflow.keras.layers import AveragePooling2D, Dropout, Flatten, Dense, Input
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.applications import MobileNetV2
-from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import to_categorical
-from sklearn.metrics import classification_report
-from sklearn.preprocessing import LabelBinarizer
 from tensorflow.keras.models import load_model
-from keras.engine.functional import Functional
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import Model
+from keras.engine.functional import Functional
+
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+from sklearn.preprocessing import LabelBinarizer
+
+from imutils.video.webcamvideostream import WebcamVideoStream
 from imutils.video import VideoStream
 from imutils import paths
 
@@ -65,9 +68,13 @@ class Train_mask_detector(object):
 	def lable_encoding(self) -> tuple:
 		data, labels = self.load_images()
 		data = np.array(data, dtype="float32")
-		labels = np.array(to_categorical(LabelBinarizer().fit_transform(labels)))
+		labels = np.array(to_categorical(
+			LabelBinarizer().fit_transform(labels)
+		))
 
-		return train_test_split(data, labels, test_size=0.20, stratify=labels, random_state=42)
+		return train_test_split(
+			data, labels, test_size=0.20, stratify=labels, random_state=42
+		)
 
 	def data_aug(self) -> ImageDataGenerator:
 		return ImageDataGenerator(
@@ -80,8 +87,12 @@ class Train_mask_detector(object):
 			fill_mode="nearest"
 		)
 
-	def cons_model(self):
-		baseModel = MobileNetV2(weights="imagenet", include_top=False, input_tensor=Input(shape=(224, 224, 3)))
+	def cons_model(self) -> model:
+		baseModel = MobileNetV2(
+			weights="imagenet",
+			include_top=False,
+			input_tensor=Input(shape=(224, 224, 3))
+		)
 
 		headModel = baseModel.output
 		headModel = AveragePooling2D(pool_size=(7, 7))(headModel)
@@ -100,9 +111,11 @@ class Train_mask_detector(object):
 	def compile_model(self) -> None:
 		print("[INFO] compiling model...")
 		opt = Adam(learning_rate=INIT_LR, decay=INIT_LR / EPOCHS)
-		self.model.compile(loss="binary_crossentropy", optimizer=opt, metrics=["accuracy"])
+		self.model.compile(
+			loss="binary_crossentropy", optimizer=opt, metrics=["accuracy"]
+		)
 
-	def training_network(self):
+	def training_network(self) -> tuple:
 		trainX, testX, trainY, testY = self.lable_encoding()
 		return self.model.fit(
 			self.aug.flow(trainX, trainY, batch_size=BS),
@@ -122,9 +135,10 @@ class Train_mask_detector(object):
 		predIdxs = np.argmax(predIdxs, axis=1)
 
 		# show a nicely formatted classification report
-		print(classification_report(testY.argmax(axis=1), predIdxs, target_names=lb.classes_))
+		print(classification_report(
+				testY.argmax(axis=1), predIdxs, target_names=lb.classes_)
+		)
 
-		# serialize the model to disk
 		print("[INFO] saving mask detector model...")
 		model.save("./face_detector/mask_detector.model", save_format="h5")
 
@@ -153,13 +167,20 @@ class Main(object):
 		self.vs = asyncio.run(self.start_video())
 		asyncio.run(self.detect_mask())
 
-	async def start_video(self) -> imutils.video.webcamvideostream.WebcamVideoStream:
+	async def start_video(self) -> WebcamVideoStream:
 		print('[INFO] Video starten...')
 		return VideoStream(src=0).start()
 
-	async def detect_and_predict_mask(self, frame: np.ndarray, face_net: cv2.dnn_Net, mask_net: Functional) -> typing.Union[tuple, None]:
+	async def detect_and_predict_mask(
+		self,
+		frame: np.ndarray,
+		face_net: cv2.dnn_Net,
+		mask_net: Functional
+	) -> typing.Union[tuple, None]:
 		h, w = frame.shape[:2]
-		blob = cv2.dnn.blobFromImage(frame, 1.0, (224, 224), (104.0, 177.0, 123.0))
+		blob = cv2.dnn.blobFromImage(
+			frame, 1.0, (224, 224), (104.0, 177.0, 123.0)
+		)
 
 		face_net.setInput(blob)
 		detections = face_net.forward()
@@ -167,11 +188,11 @@ class Main(object):
 
 		# loop over the detections
 		for i in range(0, detections.shape[2]):
-			# extract the confidence (i.e., probability) associated with the detection
+			# extract the confidence
 			confidence = detections[0, 0, i, 2]
 
 			if confidence > 0.5:
-				# compute the (x, y)-coordinates of the bounding box for the object
+				# compute the (x, y)-coordinates
 				box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
 				startX, startY, endX, endY = box.astype('int')
 
@@ -193,7 +214,7 @@ class Main(object):
 			faces = np.array(faces, dtype='float32')
 			preds = mask_net.predict(faces, batch_size=32)
 
-		# return a 2-tuple of the face locations and their corresponding locations
+		# return a 2-tuple of the face locations and their locations
 		return locs, preds
 
 	async def detect_mask(self) -> None:
@@ -202,10 +223,12 @@ class Main(object):
 			# video of 1920 pixels
 			frame = imutils.resize(self.vs.read(), width=1920)
 
-			# detect faces in the frame and determine if they are wearing a face mask or not
-			locs, preds = await self.detect_and_predict_mask(frame, self.face_net, self.mask_net)
+			# detect faces and if they are wearing a face mask or not
+			locs, preds = await self.detect_and_predict_mask(
+				frame, self.face_net, self.mask_net
+			)
 
-			# loop over the detected face locations and their corresponding locations
+			# loop over the detected face locations and their locations
 			for box, pred in zip(locs, preds):
 				# unpack the box and predictions
 				startX, startY, endX, endY = box
@@ -217,7 +240,10 @@ class Main(object):
 				# include the probability in the label
 				label = '{}: {:.2f}%'.format(label, max(mask, withoutMask) * 100)
 
-				cv2.putText(frame, label, (startX, startY - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 2)
+				cv2.putText(
+					frame, label, (startX, startY - 10),
+					cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 2
+				)
 				cv2.rectangle(frame, (startX, startY), (endX, endY), color, 2)
 
 			# show the output frame
