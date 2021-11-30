@@ -1,6 +1,7 @@
 tensorflow
 tensorflow-gpu # Optional
 keras
+sklearn
 asyncio
 imutils
 numpy
